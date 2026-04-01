@@ -3,7 +3,8 @@ import express from 'express'
 
 export const authenticate = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   try {
-    const session = await auth.api.getSession({ headers: req.headers })
+    // Convert Express headers (IncomingHttpHeaders) to standard Fetch Headers for Better Auth compatibility
+    const session = await auth.api.getSession({ headers: new Headers(req.headers as any) })
     if (!session) {
       return res.status(401).json({ 
         error: 'Unauthorized', 

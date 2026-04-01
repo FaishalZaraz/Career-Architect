@@ -25,6 +25,15 @@ app.use(express.json())
 app.all('/api/auth/*', toNodeHandler(auth))
 
 // Application Routes
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Career Architect API is running', 
+    status: 'online', 
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  })
+})
+
 app.use('/api/jobs', jobRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/user', userRoutes)
