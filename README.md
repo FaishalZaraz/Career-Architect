@@ -1,4 +1,4 @@
-# JobTracker
+# ![Logo](./apps/web/public/logo.png) JobTracker
 
 JobTracker is a modern, full-stack application designed to help users manage their job applications efficiently. It features a comprehensive dashboard with real-time analytics, job pipeline management, and seamless authentication.
 
