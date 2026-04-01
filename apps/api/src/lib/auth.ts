@@ -14,7 +14,11 @@ export const auth = betterAuth({
       verification: schema.verifications,
     }
   }),
-  trustedOrigins: [process.env.FRONTEND_URL || 'http://localhost:3000'],
+  trustedOrigins: [
+    'http://localhost:3000',
+    'https://career-architect-web.vercel.app',
+    ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
+  ],
   emailAndPassword: {
     enabled: true
   },

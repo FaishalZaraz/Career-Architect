@@ -15,8 +15,23 @@ const PORT = process.env.PORT || 4000
 // Middleware
 app.use(helmet())
 app.use(morgan('dev'))
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://career-architect-web.vercel.app',
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
+]
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.some(o => origin.startsWith(o))) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true
 }))
 app.use(express.json())
