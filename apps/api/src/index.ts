@@ -12,6 +12,9 @@ import userRoutes from './routes/user.js'
 const app = express()
 const PORT = process.env.PORT || 4000
 
+// Tell Express to trust the proxy (for secure cookies on Vercel)
+app.set('trust proxy', true)
+
 // Middleware
 app.use(helmet())
 app.use(morgan('dev'))
