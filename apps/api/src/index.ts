@@ -1,0 +1,50 @@
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
+import helmet from 'helmet'
+import 'dotenv/config'
+import { toNodeHandler } from 'better-auth/node'
+import { auth } from './lib/auth.js'
+import jobRoutes from './routes/jobs.js'
+import analyticsRoutes from './routes/analytics.js'
+import userRoutes from './routes/user.js'
+
+const app = express()
+const PORT = process.env.PORT || 4000
+
+// Middleware
+app.use(helmet())
+app.use(morgan('dev'))
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}))
+app.use(express.json())
+
+// Better Auth API Route
+app.all('/api/auth/*', toNodeHandler(auth))
+
+// Application Routes
+app.use('/api/jobs', jobRoutes)
+app.use('/api/analytics', analyticsRoutes)
+app.use('/api/user', userRoutes)
+
+// Health Check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
+// Error Handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error(err.stack)
+  res.status(500).json({ error: 'Internal Server Error', message: err.message })
+})
+
+// Server initiation handled for Vercel serverless or local execution
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 JobTracker API running on http://localhost:${PORT}`)
+  })
+}
+
+export default app
