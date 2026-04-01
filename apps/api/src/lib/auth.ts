@@ -20,6 +20,8 @@ export const auth = betterAuth({
   trustedOrigins: [
     'http://localhost:3000',
     'https://career-architect-web.vercel.app',
+    'https://career-architect-api.vercel.app',
+    // Allowed origins will now include the unified domain automatically via process.env.BETTER_AUTH_URL or FRONTEND_URL
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
   ],
   emailAndPassword: {

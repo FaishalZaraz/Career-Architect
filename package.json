@@ -5,8 +5,8 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=@job-tracker/web",
-    "build": "npm run build --workspace=@job-tracker/web",
-    "preview": "npm run preview --workspace=@job-tracker/web"
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "preview": "npm run preview --workspaces"
   }
 }
