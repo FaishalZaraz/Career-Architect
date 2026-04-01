@@ -37,9 +37,19 @@ function AppContent() {
 
   if (isPending) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant animate-pulse">Initializing Career Architect...</p>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center mb-8 border border-outline-variant/20 overflow-hidden shadow-2xl relative z-10 animate-fade-in animate-scale-in">
+          <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+        </div>
+        <div className="w-12 h-1 bg-surface-container-highest rounded-full overflow-hidden mb-6 relative z-10">
+          <div className="w-full h-full bg-primary animate-loading-bar origin-left"></div>
+        </div>
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant animate-pulse relative z-10">Initializing Career Architect</p>
+        
+        {/* Background Decorative Glow */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary/10 blur-[100px] animate-pulse"></div>
+        </div>
       </div>
     )
   }

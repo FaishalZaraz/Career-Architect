@@ -73,7 +73,10 @@ const Login = () => {
     <div className="fixed inset-0 overflow-hidden bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary">
       {/* TopNavBar */}
       <nav className="fixed top-0 left-0 right-0 h-16 z-50 bg-background/40 dark:bg-slate-950/40 backdrop-blur-xl flex items-center justify-between px-8 w-full border-b border-outline-variant/10 dark:border-white/5 transition-colors duration-300">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center overflow-hidden border border-outline-variant/10">
+            <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+          </div>
           <span className="text-xl font-bold tracking-tighter text-on-surface block">Career Architect</span>
         </div>
         <div className="flex items-center gap-4">
@@ -102,7 +105,10 @@ const Login = () => {
 
         {/* Login Card */}
         <div className="glass-card w-full max-w-[440px] p-10 rounded-xl shadow-2xl relative z-10">
-          <header className="mb-10 text-center">
+          <header className="mb-10 text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center mb-6 border border-outline-variant/20 overflow-hidden shadow-inner">
+              <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+            </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-on-surface mb-2">Welcome Back</h1>
             <p className="text-on-surface-variant text-sm font-medium">Continue your career evolution.</p>
           </header>

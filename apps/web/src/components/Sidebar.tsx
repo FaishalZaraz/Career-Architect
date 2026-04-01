@@ -40,8 +40,8 @@ const Sidebar = () => {
   return (
     <aside className="h-screen w-64 fixed left-0 top-0 bg-surface-container-low/70 backdrop-blur-3xl shadow-xl shadow-surface-container-highest/10 flex flex-col py-8 px-4 z-50 border-r border-outline-variant/10 transition-colors duration-300">
       <div className="mb-10 px-2 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center">
-          <span className="material-symbols-outlined text-on-primary-container" style={{ fontVariationSettings: "'FILL' 1" }}>architecture</span>
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center border border-outline-variant/20 overflow-hidden shadow-inner">
+          <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
         </div>
         <div className="flex flex-col">
           <span className="text-xl font-bold tracking-tighter text-on-surface">Career Architect</span>

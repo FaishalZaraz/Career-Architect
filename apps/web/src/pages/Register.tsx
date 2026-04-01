@@ -71,7 +71,10 @@ const Register = () => {
     <div className="min-h-screen flex flex-col bg-background text-on-background font-body selection:bg-primary/30">
       {/* Top Navigation Bar */}
       <header className="fixed top-0 w-full z-50 bg-background/40 dark:bg-[#0b0e14]/70 backdrop-blur-[40px] flex justify-between items-center px-8 h-16 border-b border-outline-variant/10 dark:border-white/5 transition-colors duration-300">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center overflow-hidden border border-outline-variant/10">
+            <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+          </div>
           <span className="text-xl font-bold tracking-tighter text-on-surface block">Career Architect</span>
         </div>
         <div className="flex items-center gap-4">
@@ -104,7 +107,10 @@ const Register = () => {
         <div className="w-full max-w-lg relative z-10">
           <div className="glass-card rounded-xl p-10 underglow-primary">
             {/* Header Section */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-10 flex flex-col items-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center mb-6 border border-outline-variant/20 overflow-hidden shadow-inner">
+                <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+              </div>
               <h1 className="text-3xl font-bold tracking-tight text-on-surface font-headline mb-2">Build Your Future</h1>
               <p className="text-on-surface-variant text-sm">Join the elite network of executive professionals.</p>
             </div>
