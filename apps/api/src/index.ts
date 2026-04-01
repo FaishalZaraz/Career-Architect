@@ -19,21 +19,21 @@ app.set('trust proxy', true)
 app.use(helmet())
 app.use(morgan('dev'))
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://career-architect-web.vercel.app',
-  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
-]
-
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.some(o => origin.startsWith(o))) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
+    // Allow requests with no origin (server-to-server, curl, etc.)
+    if (!origin) return callback(null, true)
+    
+    // Allow localhost for development
+    if (origin.includes('localhost')) return callback(null, true)
+    
+    // Allow any *.vercel.app domain (unified deployment)
+    if (origin.endsWith('.vercel.app')) return callback(null, true)
+    
+    // Allow FRONTEND_URL from environment
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true)
+    
+    callback(new Error('Not allowed by CORS'))
   },
   credentials: true
 }))
