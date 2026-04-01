@@ -14,6 +14,9 @@ export const auth = betterAuth({
       verification: schema.verifications,
     }
   }),
+  account: {
+    skipStateCookieCheck: true
+  },
   trustedOrigins: [
     'http://localhost:3000',
     'https://career-architect-web.vercel.app',
