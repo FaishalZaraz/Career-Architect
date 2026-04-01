@@ -48,7 +48,7 @@ This project is a monorepo organized into two main applications:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/JobTracker-Web.git
+    git clone https://github.com/FaishalZaraz/JobTracker-Web.git
     cd JobTracker-Web
     ```
 
@@ -77,5 +77,5 @@ From the root directory, you can run:
 
 ---
 
-Built with ❤️ by [Kira](https://github.com/Kira) (or Zarazir Corp).
+Built with ☕ by [Zarazir](https://github.com/FaishalZaraz) (or Zarazir Corp).
 v1.0.0
