@@ -208,13 +208,22 @@ const Settings = () => {
                             <span className="material-symbols-outlined text-on-surface-variant">{s.userAgent?.toLowerCase().includes('mobile') ? 'smartphone' : 'laptop'}</span>
                           </div>
                           <div>
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm font-bold text-on-surface">{s.ipAddress || 'Remote Node'}</p>
-                              {s.id === session?.session?.id && (
-                                <span className="px-1.5 py-0.5 rounded-full bg-primary/20 text-primary text-[8px] font-bold uppercase tracking-widest">Current</span>
-                              )}
+                            <div className="flex items-center gap-2 mb-0.5">
+                              {(() => {
+                                const { browser, os, device } = parseUserAgent(s.userAgent)
+                                return (
+                                  <>
+                                    <p className="text-sm font-bold text-on-surface">{browser} on {os}</p>
+                                    {s.id === session?.session?.id && (
+                                      <span className="px-1.5 py-0.5 rounded-full bg-primary/20 text-primary text-[8px] font-bold uppercase tracking-widest">Current</span>
+                                    )}
+                                  </>
+                                )
+                              })()}
                             </div>
-                            <p className="text-[10px] text-on-surface-variant uppercase tracking-tight">{s.userAgent || 'Unknown System'}</p>
+                            <p className="text-[10px] text-on-surface-variant uppercase tracking-tight">
+                              {parseUserAgent(s.userAgent).device} Device
+                            </p>
                           </div>
                         </div>
                         {s.id !== session?.session?.id && (
@@ -300,3 +309,29 @@ function SettingsInput({ label, value, onChange }: any) {
 
 
 export default Settings
+
+function parseUserAgent(ua: string) {
+  if (!ua) return { browser: 'Unknown Browser', os: 'Unknown OS', device: 'Unknown Device' }
+  
+  let browser = 'Unknown Browser'
+  if (ua.includes('Firefox')) browser = 'Firefox'
+  else if (ua.includes('Edg')) browser = 'Edge'
+  else if (ua.includes('Chrome')) browser = 'Chrome'
+  else if (ua.includes('Safari')) browser = 'Safari'
+  
+  let os = 'Unknown OS'
+  if (ua.includes('Win')) os = 'Windows'
+  else if (ua.includes('Mac')) os = 'macOS'
+  else if (ua.includes('Linux')) os = 'Linux'
+  else if (ua.includes('Android')) os = 'Android'
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS'
+
+  let device = 'Desktop'
+  if (ua.includes('Mobile') || ua.includes('Android') || ua.includes('iPhone')) {
+    device = 'Mobile'
+  } else if (ua.includes('iPad')) {
+    device = 'Tablet'
+  }
+  
+  return { browser, os, device }
+}
