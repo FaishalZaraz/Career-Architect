@@ -129,16 +129,16 @@ const Analytics = () => {
   return (
     <div className="pt-4 pb-12 space-y-8">
       {/* Header Section */}
-      <section className="flex justify-between items-end">
+      <section className="flex flex-col md:flex-row justify-between md:items-end gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-on-surface">Performance Insights</h2>
-          <p className="text-on-surface-variant mt-1">Reviewing your career trajectory and application efficiency.</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface">Performance Insights</h2>
+          <p className="text-on-surface-variant mt-1 text-sm md:text-base">Reviewing your career trajectory and application efficiency.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3 shrink-0">
           <div className="relative">
             <div 
               onClick={() => setShowPeriodDropdown(!showPeriodDropdown)}
-              className="bg-surface-container-high px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border border-outline-variant/10 cursor-pointer hover:bg-surface-bright transition-colors select-none"
+              className="bg-surface-container-high px-3 md:px-4 py-2 rounded-lg flex items-center gap-2 text-xs md:text-sm font-medium border border-outline-variant/10 cursor-pointer hover:bg-surface-bright transition-colors select-none"
             >
               <span className="text-on-surface-variant">Period:</span>
               <span>Last {period} Months</span>
@@ -218,88 +218,92 @@ const Analytics = () => {
             </div>
           </div>
           
-          <div className="h-64 w-full relative">
-            <div className="absolute inset-0 flex items-end justify-between px-2 border-b border-l border-outline-variant/20">
-              {sortedMonths.length > 0 && (
-                <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox={`0 0 1000 200`}>
-                  <defs>
-                    <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0%" stopColor="#85adff" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#85adff" stopOpacity="0" />
-                    </linearGradient>
-                    <style>{`
-                      .animate-draw {
-                        stroke-dasharray: 2000;
-                        stroke-dashoffset: 2000;
-                        animation: draw 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                      }
-                      @keyframes draw {
-                        to { stroke-dashoffset: 0; }
-                      }
-                      .stagger-point {
-                        opacity: 0;
-                        animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-                      }
-                      @keyframes fadeInScale {
-                        from { opacity: 0; transform: scale(0); transform-origin: center; }
-                        to { opacity: 1; transform: scale(1); transform-origin: center; }
-                      }
-                    `}</style>
-                  </defs>
-                  {/* Total applications line */}
-                  <path 
-                    d={`M ${sortedMonths.map((d: any, i: number) => {
-                      return `${getX(i, sortedMonths.length)},${getY(d.total, maxVal)}`
-                    }).join(' L ')}`} 
-                    fill="none" 
-                    stroke="#85adff" 
-                    strokeWidth="4" 
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="animate-draw"
-                  />
-                  <path 
-                    d={`M ${getX(0, sortedMonths.length)},200 L ${sortedMonths.map((d: any, i: number) => {
-                      return `${getX(i, sortedMonths.length)},${getY(d.total, maxVal)}`
-                    }).join(' L ')} L ${getX(sortedMonths.length - 1, sortedMonths.length)},200 Z`} 
-                    fill="url(#lineGrad)" 
-                  />
-                  {/* Individual circles for data points and labels */}
-                  {sortedMonths.map((d: any, i: number) => {
-                    const cx = getX(i, sortedMonths.length)
-                    const cy = getY(d.total, maxVal)
-                    return (
-                      <g key={`${i}-${period}`} className="stagger-point" style={{ animationDelay: `${i * 0.1 + 0.5}s` }}>
-                        <circle 
-                          cx={cx} 
-                          cy={cy} 
-                          r="6" 
-                          fill="#85adff"
-                          className="drop-shadow-lg"
-                        />
-                        <text
-                          x={cx}
-                          y={cy - 15}
-                          textAnchor="middle"
-                          fill="#85adff"
-                          fontSize="10"
-                          fontWeight="bold"
-                          className="font-mono"
-                        >
-                          {d.total}
-                        </text>
-                      </g>
-                    )
-                  })}
-                </svg>
-              )}
-              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-5">
-                {[1, 2, 3, 4].map(i => <div key={i} className="w-full h-[1px] bg-on-surface"></div>)}
+          <div className="w-full overflow-x-auto no-scrollbar pb-2">
+            <div className="min-w-[600px]">
+              <div className="h-48 md:h-64 w-full relative">
+                <div className="absolute inset-0 flex items-end justify-between px-2 border-b border-l border-outline-variant/20">
+                  {sortedMonths.length > 0 && (
+                    <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox={`0 0 1000 200`}>
+                      <defs>
+                        <linearGradient id="lineGrad" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stopColor="#85adff" stopOpacity="0.3" />
+                          <stop offset="100%" stopColor="#85adff" stopOpacity="0" />
+                        </linearGradient>
+                        <style>{`
+                          .animate-draw {
+                            stroke-dasharray: 2000;
+                            stroke-dashoffset: 2000;
+                            animation: draw 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                          }
+                          @keyframes draw {
+                            to { stroke-dashoffset: 0; }
+                          }
+                          .stagger-point {
+                            opacity: 0;
+                            animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                          }
+                          @keyframes fadeInScale {
+                            from { opacity: 0; transform: scale(0); transform-origin: center; }
+                            to { opacity: 1; transform: scale(1); transform-origin: center; }
+                          }
+                        `}</style>
+                      </defs>
+                      {/* Total applications line */}
+                      <path 
+                        d={`M ${sortedMonths.map((d: any, i: number) => {
+                          return `${getX(i, sortedMonths.length)},${getY(d.total, maxVal)}`
+                        }).join(' L ')}`} 
+                        fill="none" 
+                        stroke="#85adff" 
+                        strokeWidth="4" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="animate-draw"
+                      />
+                      <path 
+                        d={`M ${getX(0, sortedMonths.length)},200 L ${sortedMonths.map((d: any, i: number) => {
+                          return `${getX(i, sortedMonths.length)},${getY(d.total, maxVal)}`
+                        }).join(' L ')} L ${getX(sortedMonths.length - 1, sortedMonths.length)},200 Z`} 
+                        fill="url(#lineGrad)" 
+                      />
+                      {/* Individual circles for data points and labels */}
+                      {sortedMonths.map((d: any, i: number) => {
+                        const cx = getX(i, sortedMonths.length)
+                        const cy = getY(d.total, maxVal)
+                        return (
+                          <g key={`${i}-${period}`} className="stagger-point" style={{ animationDelay: `${i * 0.1 + 0.5}s` }}>
+                            <circle 
+                              cx={cx} 
+                              cy={cy} 
+                              r="6" 
+                              fill="#85adff"
+                              className="drop-shadow-lg"
+                            />
+                            <text
+                              x={cx}
+                              y={cy - 15}
+                              textAnchor="middle"
+                              fill="#85adff"
+                              fontSize="10"
+                              fontWeight="bold"
+                              className="font-mono"
+                            >
+                              {d.total}
+                            </text>
+                          </g>
+                        )
+                      })}
+                    </svg>
+                  )}
+                  <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-5">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="w-full h-[1px] bg-on-surface"></div>)}
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-between mt-4 px-2 md:px-[50px] text-[9px] md:text-[10px] font-bold text-on-surface-variant uppercase tracking-widest gap-1">
+                {sortedMonths.map((m: any) => <span key={m.month} className="w-0 flex justify-center overflow-visible">{m.month}</span>)}
               </div>
             </div>
-          </div>
-          <div className="flex justify-between mt-4 px-[50px] text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-            {sortedMonths.map((m: any) => <span key={m.month} className="w-0 flex justify-center overflow-visible">{m.month}</span>)}
           </div>
         </div>
       </section>
@@ -308,7 +312,7 @@ const Analytics = () => {
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-surface-container-low rounded-2xl p-8 border border-outline-variant/10">
           <h3 className="text-lg font-bold text-on-surface mb-6">Application Sources</h3>
-          <div className="flex flex-col sm:flex-row items-center gap-12">
+          <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-12">
             <div className="relative w-48 h-48">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                 {donutSegments.length > 0 && totalApps > 0 ? donutSegments.map((s: any) => (
@@ -447,7 +451,7 @@ function AnalyticsStatCard({ label, value, trend, progress, color, isStable }: a
       <div className={`absolute top-0 right-0 w-32 h-32 ${colorMap[color]}/5 rounded-full -mr-16 -mt-16 blur-3xl transition-opacity opacity-0 group-hover:opacity-100`}></div>
       <p className="text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">{label}</p>
       <div className="flex items-baseline gap-2 mt-2">
-        <span className="text-4xl font-bold tracking-tighter text-on-surface">{value}</span>
+        <span className="text-2xl md:text-4xl font-bold tracking-tighter text-on-surface">{value}</span>
         <span className={`${isStable ? 'text-on-surface-variant' : 'text-tertiary'} text-xs font-bold`}>{trend}</span>
       </div>
       <div className="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">

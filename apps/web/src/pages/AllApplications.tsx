@@ -145,12 +145,12 @@ const AllApplications = () => {
     <div onClick={() => isSortOpen && setIsSortOpen(false)}>
       <div className="flex flex-col gap-10 transition-all duration-300">
       {/* Page Header & Stats Bento */}
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-12 lg:col-span-6 flex flex-col justify-center">
-          <h1 className="text-3xl font-bold tracking-tight text-on-surface mb-2">Application Tracking Board</h1>
-          <p className="text-on-surface-variant max-w-lg">Manage your high-stakes opportunities with architectural precision. Filter through <span className="text-primary font-bold">{stats.totalApplications}</span> roles and active entries.</p>
+      <div className="grid grid-cols-1 gap-4 md:gap-6">
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-2">Application Tracking Board</h1>
+          <p className="text-on-surface-variant text-sm md:text-base max-w-lg">Manage your high-stakes opportunities with architectural precision. Filter through <span className="text-primary font-bold">{stats.totalApplications}</span> roles and active entries.</p>
         </div>
-        <div className="col-span-12 lg:col-span-6 grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3 md:gap-4">
           <StatBox label="Total" value={isSummaryLoading ? '...' : stats.totalApplications} color="primary" />
           <StatBox label="Interviews" value={isSummaryLoading ? '...' : stats.interviewsCount} color="tertiary" />
           <StatBox label="Offers" value={isSummaryLoading ? '...' : stats.offersCount} color="error" />
@@ -158,8 +158,8 @@ const AllApplications = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-surface-container-low rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+      <div className="bg-surface-container-low rounded-xl p-3 md:p-4 flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center justify-between gap-3 md:gap-4">
+        <div className="flex items-center gap-2 md:gap-3 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
           {['All Apps', 'Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'].map((filter) => (
             <button 
               key={filter} 
@@ -170,7 +170,7 @@ const AllApplications = () => {
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
           <div className="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10 group focus-within:border-primary/40 transition-colors">
             <span className="material-symbols-outlined text-sm text-outline group-focus-within:text-primary transition-colors">search</span>
             <input 
@@ -178,7 +178,7 @@ const AllApplications = () => {
               placeholder="Search companies or roles..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-xs w-48 text-on-surface placeholder:text-outline/40 p-0"
+              className="bg-transparent border-none focus:ring-0 text-xs w-full md:w-48 text-on-surface placeholder:text-outline/40 p-0"
             />
           </div>
           
@@ -221,6 +221,7 @@ const AllApplications = () => {
 
       {/* Table View */}
       <div className="bg-surface-container rounded-xl overflow-hidden shadow-2xl border border-white/5">
+        <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-surface-container-high/50 border-b border-outline-variant/10">
@@ -261,9 +262,10 @@ const AllApplications = () => {
             )}
           </tbody>
         </table>
+        </div>
         
         {/* Pagination Summary */}
-        <div className="px-6 py-4 bg-surface-container-high/30 flex items-center justify-between border-t border-outline-variant/10">
+        <div className="px-4 md:px-6 py-4 bg-surface-container-high/30 flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-outline-variant/10 gap-2">
           <p className="text-xs text-on-surface-variant">
             Showing <span className="text-on-surface font-bold">{filteredAndSortedJobs.length}</span> results 
             {activeFilter !== 'All Apps' && <span> for <span className="text-primary font-bold">{activeFilter}</span></span>}
@@ -278,7 +280,7 @@ const AllApplications = () => {
       {!isConfirmOpen && !isModalOpen && !isDrawerOpen && (
         <button 
             onClick={handleOpenCreate}
-            className="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary-container shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group"
+            className="fixed bottom-6 right-4 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary-container shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group"
         >
             <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>
             <div className="absolute right-full mr-4 bg-surface-bright px-3 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-outline-variant/10 shadow-xl">Quick Add Tracking</div>

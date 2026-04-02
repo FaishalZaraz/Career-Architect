@@ -31,6 +31,7 @@ export const auth = betterAuth({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       prompt: 'select_account',
+      accessType: 'online',
     },
     linkedin: {
       clientId: process.env.LINKEDIN_CLIENT_ID!,

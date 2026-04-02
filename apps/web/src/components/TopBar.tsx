@@ -5,7 +5,11 @@ import { api } from '../lib/api'
 import { authClient } from '../lib/auth-client'
 import { useCalendar } from '../context/CalendarContext'
 
-const TopBar = () => {
+interface TopBarProps {
+  onMenuToggle: () => void
+}
+
+const TopBar: React.FC<TopBarProps> = ({ onMenuToggle }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const isCalendar = location.pathname === '/calendar'
@@ -14,6 +18,7 @@ const TopBar = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [showResults, setShowResults] = useState(false)
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark')
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
 
   const { data: session } = authClient.useSession()
   const user = session?.user
@@ -56,18 +61,48 @@ const TopBar = () => {
   const formattedDate = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })
 
   return (
-    <header className="fixed top-0 right-0 left-64 h-16 z-40 bg-surface-container-high/60 backdrop-blur-xl flex items-center justify-between px-8 border-b border-outline-variant/10 transition-colors duration-300">
-      <div className="flex items-center flex-1 max-w-xl">
-        <div className="relative w-full group">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
-          <input
-            className="w-full bg-surface-container-lowest border-none rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline text-on-surface focus:bg-surface-bright/50"
-            placeholder={isCalendar ? "Search applications, dates, or companies..." : "Quick search company or role..."}
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => searchTerm && setShowResults(true)}
-          />
+    <header className="fixed top-0 right-0 left-0 lg:left-64 h-16 z-40 bg-surface-container-high/60 backdrop-blur-xl flex items-center justify-between px-4 md:px-8 border-b border-outline-variant/10 transition-all duration-300">
+      {/* Left section: Hamburger + Search */}
+      <div className="flex items-center flex-1 max-w-xl gap-3">
+        {/* Hamburger Menu - Mobile Only */}
+        <button 
+          onClick={onMenuToggle}
+          className="lg:hidden p-2 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors shrink-0"
+        >
+          <span className="material-symbols-outlined text-xl">menu</span>
+        </button>
+
+        {/* Mobile Logo - Only show on small screens */}
+        <div className="lg:hidden flex items-center gap-2 shrink-0 mr-1">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center border border-outline-variant/20 overflow-hidden">
+            <img src="/logo.png" alt="CA Logo" className="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <div className={`relative w-full group ${mobileSearchOpen ? 'absolute inset-0 z-50 bg-surface-container-high flex items-center px-4 gap-2' : 'hidden sm:block'}`}>
+          {mobileSearchOpen && (
+            <button 
+              onClick={() => {
+                setMobileSearchOpen(false)
+                setSearchTerm('')
+              }}
+              className="p-2 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors sm:hidden"
+            >
+              <span className="material-symbols-outlined text-xl">arrow_back</span>
+            </button>
+          )}
+          <div className="relative flex-1">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+            <input
+              id="mobile-search-input"
+              className="w-full bg-surface-container-lowest border-none rounded-xl pl-10 pr-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline text-on-surface focus:bg-surface-bright/50"
+              placeholder={isCalendar ? "Search applications, dates..." : "Quick search company or role..."}
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => searchTerm && setShowResults(true)}
+            />
+          </div>
 
           {/* Search Results Dropdown */}
           {showResults && (
@@ -121,11 +156,25 @@ const TopBar = () => {
             </div>
           )}
         </div>
+
+        {/* Mobile Search Button */}
+        <button 
+          className="sm:hidden p-2 rounded-lg hover:bg-surface-container text-on-surface-variant transition-colors"
+          onClick={() => {
+            setMobileSearchOpen(true)
+            setTimeout(() => {
+              const el = document.getElementById('mobile-search-input')
+              if (el) el.focus()
+            }, 100)
+          }}
+        >
+          <span className="material-symbols-outlined text-xl">search</span>
+        </button>
       </div>
       
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3 md:gap-6">
         {isCalendar && (
-          <div className="flex items-center gap-3 pr-4 border-r border-outline-variant/20">
+          <div className="hidden md:flex items-center gap-3 pr-4 border-r border-outline-variant/20">
             <span className="text-sm font-medium text-on-surface font-body">{formattedDate}</span>
             <div className="flex bg-surface-container rounded-lg p-1">
               <button 
@@ -144,7 +193,7 @@ const TopBar = () => {
           </div>
         )}
 
-        <div className="h-8 w-[1px] bg-outline-variant/20"></div>
+        <div className="h-8 w-[1px] bg-outline-variant/20 hidden md:block"></div>
         
         {/* Theme Toggle */}
         <button 
@@ -157,7 +206,7 @@ const TopBar = () => {
           </span>
         </button>
 
-        <div className="flex items-center gap-3 px-2">
+        <div className="hidden md:flex items-center gap-3 px-2">
           {location.pathname === '/analytics' ? (
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-on-surface">Analytics Dashboard</span>

@@ -113,12 +113,12 @@ const TrackingBoard = () => {
   return (
     <>
       <div className="flex flex-col h-full transition-all duration-300">
-        <div className="mb-10 flex justify-between items-end">
+        <div className="mb-6 md:mb-10 flex flex-col md:flex-row justify-between md:items-end gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-on-surface mb-2">Job Application Pipeline</h1>
-            <p className="text-on-surface-variant max-w-2xl font-medium">Architect your career path. Manage your active pursuits across stages with executive precision.</p>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-on-surface mb-2">Job Application Pipeline</h1>
+            <p className="text-on-surface-variant max-w-2xl font-medium text-sm md:text-base">Architect your career path. Manage your active pursuits across stages with executive precision.</p>
           </div>
-          <div className="text-xs font-bold text-on-surface-variant uppercase tracking-widest bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/10">
+          <div className="text-xs font-bold text-on-surface-variant uppercase tracking-widest bg-surface-container px-3 py-1.5 rounded-lg border border-outline-variant/10 shrink-0 self-start md:self-auto">
             {jobs?.length || 0} Total Pursuits
           </div>
         </div>
@@ -187,7 +187,7 @@ const TrackingBoard = () => {
 
       {/* Float FAB */}
       {!isModalOpen && !isDrawerOpen && !isConfirmOpen && (
-        <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-40">
+        <div className="fixed bottom-6 right-4 md:bottom-8 md:right-8 flex flex-col gap-4 z-40">
           <button 
             onClick={handleOpenCreate}
             className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-container text-on-primary-container shadow-2xl shadow-primary/40 flex items-center justify-center transition-transform hover:scale-110 active:scale-95 group"

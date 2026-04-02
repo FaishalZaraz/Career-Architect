@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Sidebar from './components/Sidebar'
@@ -11,10 +11,10 @@ import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import { CalendarProvider } from './context/CalendarContext'
+import { authClient } from './lib/auth-client'
 
 const queryClient = new QueryClient()
-
-import { CalendarProvider } from './context/CalendarContext'
 
 function App() {
   return (
@@ -28,12 +28,13 @@ function App() {
   )
 }
 
-import { authClient } from './lib/auth-client'
-
 function AppContent() {
   const location = useLocation()
   const isAuthPage = ['/login', '/register'].includes(location.pathname)
   const { data: session, isPending } = authClient.useSession()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const toggleSidebar = () => setSidebarOpen(prev => !prev)
 
   if (isPending) {
     return (
@@ -74,13 +75,13 @@ function AppContent() {
 
   return (
     <div className="flex min-h-screen bg-background text-on-surface font-body">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
       
-      <main className="ml-64 min-h-screen bg-surface flex flex-col w-full relative">
-        <TopBar />
+      <main className="lg:ml-64 min-h-screen bg-surface flex flex-col w-full relative transition-all duration-300">
+        <TopBar onMenuToggle={toggleSidebar} />
         
         {/* Main Content Area */}
-        <div className="mt-16 p-8 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+        <div className="mt-16 p-4 md:p-6 lg:p-8 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tracking" element={<TrackingBoard />} />
@@ -93,9 +94,9 @@ function AppContent() {
           </Routes>
           
           {/* Footer */}
-          <footer className="mt-auto pt-8 flex items-center justify-between text-[10px] text-on-surface-variant uppercase tracking-[0.2em] font-bold opacity-40">
+          <footer className="mt-auto pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-on-surface-variant uppercase tracking-[0.2em] font-bold opacity-40">
             <span>Career Architect v1.0.0</span>
-            <div className="flex gap-6">
+            <div className="flex gap-4 md:gap-6">
               <span className="hover:text-primary cursor-pointer transition-colors">Documentation</span>
               <span className="hover:text-primary cursor-pointer transition-colors">© {new Date().getFullYear()} Zarazir Corp</span>
             </div>
@@ -103,8 +104,8 @@ function AppContent() {
         </div>
         
         {/* Visual Polish: Ambient Glows */}
-        <div className="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none z-0"></div>
-        <div className="fixed bottom-[-10%] left-[20%] w-[400px] h-[400px] rounded-full bg-secondary/5 blur-[100px] pointer-events-none z-0"></div>
+        <div className="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/10 blur-[120px] pointer-events-none z-0 hidden md:block"></div>
+        <div className="fixed bottom-[-10%] left-[20%] w-[400px] h-[400px] rounded-full bg-secondary/5 blur-[100px] pointer-events-none z-0 hidden md:block"></div>
       </main>
     </div>
   )

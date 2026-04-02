@@ -256,16 +256,16 @@ const Register = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0b0e14] border-t border-[#45484f]/15 w-full py-12 px-8">
+      <footer className="bg-[#0b0e14] border-t border-[#45484f]/15 w-full py-8 md:py-12 px-4 md:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
           <div className="text-sm font-bold text-[#ecedf6]">Career Architect</div>
-          <div className="text-[#a9abb3] font-['Inter'] text-[10px] uppercase tracking-wider font-bold opacity-60">
+          <div className="text-[#a9abb3] font-['Inter'] text-[10px] uppercase tracking-wider font-bold opacity-60 text-center">
             Career Architect v1.0.0 | © {new Date().getFullYear()} Zarazir Corp
           </div>
-          <div className="flex gap-6">
-            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[12px]" href="#">Privacy Policy</a>
-            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[12px]" href="#">Terms of Service</a>
-            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[12px]" href="#">Help Center</a>
+          <div className="flex gap-4 md:gap-6 flex-wrap justify-center">
+            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[11px] md:text-[12px]" href="#">Privacy Policy</a>
+            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[11px] md:text-[12px]" href="#">Terms of Service</a>
+            <a className="text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Inter'] text-[11px] md:text-[12px]" href="#">Help Center</a>
           </div>
         </div>
       </footer>

@@ -213,15 +213,15 @@ const Login = () => {
       </main>
 
       {/* Footer */}
-      <footer className="fixed bottom-0 w-full py-6 flex flex-col md:flex-row items-center justify-between px-12 gap-4 bg-transparent border-t border-white/5">
+      <footer className="fixed bottom-0 w-full py-4 md:py-6 flex flex-col md:flex-row items-center justify-between px-6 md:px-12 gap-3 md:gap-4 bg-transparent border-t border-white/5">
         <div className="text-[10px] tracking-wider uppercase text-slate-500 font-bold opacity-60">
           Career Architect v1.0.0 | © {new Date().getFullYear()} Zarazir Corp
         </div>
-        <div className="flex gap-8">
-          <a className="text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Privacy Policy</a>
-          <a className="text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Terms of Service</a>
-          <a className="text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Security</a>
-          <a className="text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Support</a>
+        <div className="flex gap-4 md:gap-8 flex-wrap justify-center">
+          <a className="text-[10px] md:text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Privacy Policy</a>
+          <a className="text-[10px] md:text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Terms of Service</a>
+          <a className="text-[10px] md:text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Security</a>
+          <a className="text-[10px] md:text-xs tracking-wider uppercase text-slate-500 hover:text-slate-200 transition-all active:scale-95" href="#">Support</a>
         </div>
       </footer>
     </div>

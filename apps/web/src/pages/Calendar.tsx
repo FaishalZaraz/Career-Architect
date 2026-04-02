@@ -8,6 +8,7 @@ const Calendar = () => {
   const { currentDate, setCurrentDate, viewMode, setViewMode, next, prev, today } = useCalendar()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
+  const [showAgenda, setShowAgenda] = useState(false)
   
   const { data: jobs, isLoading } = useQuery({
     queryKey: ['jobs'],
@@ -99,15 +100,27 @@ const Calendar = () => {
 
   return (
     <>
-    <div className="flex -m-8 h-[calc(100vh-64px)] overflow-hidden">
+    <div className="flex flex-col lg:flex-row -m-4 md:-m-6 lg:-m-8 h-[calc(100vh-64px)] overflow-hidden">
       {/* Calendar Grid Section */}
-      <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-surface-container-low">
-        <div className="flex items-center justify-between mb-8">
+      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto custom-scrollbar bg-surface-container-low">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-on-surface mb-1">{monthName} {year}</h1>
-            <p className="text-on-surface-variant text-sm">Visualizing your path to the next career milestone.</p>
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface mb-1">{monthName} {year}</h1>
+            <p className="text-on-surface-variant text-xs md:text-sm">Visualizing your path to the next career milestone.</p>
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-2 md:gap-4 items-center flex-wrap">
+            {/* Mobile: Agenda toggle button */}
+            <button 
+              onClick={() => setShowAgenda(!showAgenda)}
+              className="lg:hidden flex items-center gap-1.5 bg-surface-container px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors"
+            >
+              <span className="material-symbols-outlined text-sm">event_note</span>
+              Agenda
+              {upcomingDeadlines.length > 0 && (
+                <span className="bg-primary text-on-primary text-[9px] px-1.5 py-0.5 rounded-full font-bold">{upcomingDeadlines.length}</span>
+              )}
+            </button>
+
             <div className="flex bg-surface-container rounded-lg p-1">
               <button 
                 onClick={prev}
@@ -117,7 +130,7 @@ const Calendar = () => {
               </button>
               <button 
                 onClick={today}
-                className="px-4 py-1 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 rounded-md transition-colors"
+                className="px-3 md:px-4 py-1 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 rounded-md transition-colors"
               >
                  Today
               </button>
@@ -131,13 +144,13 @@ const Calendar = () => {
             <div className="flex gap-1 bg-surface-container p-1 rounded-lg">
               <button 
                 onClick={() => setViewMode('month')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'month' ? 'bg-surface-container-high text-on-surface shadow-sm inner-glow' : 'text-on-surface-variant hover:text-on-surface'}`}
+                className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all ${viewMode === 'month' ? 'bg-surface-container-high text-on-surface shadow-sm inner-glow' : 'text-on-surface-variant hover:text-on-surface'}`}
               >
                 Month
               </button>
               <button 
                 onClick={() => setViewMode('week')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${viewMode === 'week' ? 'bg-surface-container-high text-on-surface shadow-sm inner-glow' : 'text-on-surface-variant hover:text-on-surface'}`}
+                className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-all ${viewMode === 'week' ? 'bg-surface-container-high text-on-surface shadow-sm inner-glow' : 'text-on-surface-variant hover:text-on-surface'}`}
               >
                 Week
               </button>
@@ -149,12 +162,12 @@ const Calendar = () => {
           {/* Day Headers */}
           <div className="grid grid-cols-7 border-b border-outline-variant/10 bg-surface-container-highest">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-              <div key={day} className="py-3 text-center text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{day}</div>
+              <div key={day} className="py-2 md:py-3 text-center text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{day}</div>
             ))}
           </div>
 
           {/* Calendar Days */}
-          <div className={`grid grid-cols-7 ${viewMode === 'month' ? 'auto-rows-[minmax(120px,auto)]' : 'h-[500px]'}`}>
+          <div className={`grid grid-cols-7 ${viewMode === 'month' ? 'auto-rows-[minmax(80px,auto)] md:auto-rows-[minmax(120px,auto)]' : 'h-[400px] md:h-[500px]'}`}>
             {isLoading ? (
                <div className="col-span-7 py-20 text-center animate-pulse uppercase font-bold tracking-widest text-xs opacity-30">Synchronizing Timelines...</div>
             ) : displayDays.map((dayObj, idx) => {
@@ -162,19 +175,22 @@ const Calendar = () => {
               const isToday = dayObj.date.toDateString() === new Date().toDateString()
               
               return (
-                <div key={idx} className={`p-2 border-r border-b border-outline-variant/5 hover:bg-surface-bright/5 transition-colors relative group ${!dayObj.currentMonth ? 'bg-surface-container-low/30 opacity-30 text-outline-variant/20' : ''} ${isToday ? 'ring-1 ring-primary/30 bg-primary/5' : ''}`}>
-                  <span className={`text-xs font-medium px-1 ${isToday ? 'text-primary font-bold' : 'text-on-surface-variant group-hover:text-on-surface'}`}>
+                <div key={idx} className={`p-1 md:p-2 border-r border-b border-outline-variant/5 hover:bg-surface-bright/5 transition-colors relative group ${!dayObj.currentMonth ? 'bg-surface-container-low/30 opacity-30 text-outline-variant/20' : ''} ${isToday ? 'ring-1 ring-primary/30 bg-primary/5' : ''}`}>
+                  <span className={`text-[10px] md:text-xs font-medium px-1 ${isToday ? 'text-primary font-bold' : 'text-on-surface-variant group-hover:text-on-surface'}`}>
                     {dayObj.date.getDate() < 10 ? `0${dayObj.date.getDate()}` : dayObj.date.getDate()}
                   </span>
                   
-                  <div className="mt-2 flex flex-col gap-1">
-                    {events.map((job: any) => (
+                  <div className="mt-1 md:mt-2 flex flex-col gap-1">
+                    {events.slice(0, 2).map((job: any) => (
                       <CalendarEvent 
                         key={job.id} 
                         job={job}
                         onClick={() => handleOpenDetail(job.id)}
                       />
                     ))}
+                    {events.length > 2 && (
+                      <span className="text-[9px] text-primary font-bold px-1">+{events.length - 2} more</span>
+                    )}
                   </div>
                 </div>
               )
@@ -183,38 +199,65 @@ const Calendar = () => {
         </div>
 
         {/* Dashboard Stats */}
-        <div className="mt-10 grid grid-cols-3 gap-6">
+        <div className="mt-6 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
           <StatMini label="Active Pursuits" value={jobs?.length || 0} sub="Managed" color="secondary" />
           <StatMini label="Offers Pending" value={jobs?.filter((j: any) => j.status === 'Offer').length || 0} sub="High Probability" color="tertiary" />
           <StatMini label="Upcoming Deadlines" value={upcomingDeadlines.length} sub={daysToLast > 0 ? `Next ${daysToLast} days` : 'No deadlines'} color="primary" />
         </div>
       </div>
 
-      {/* Today's Agenda Sidebar */}
-      <aside className="w-96 border-l border-outline-variant/10 bg-surface-container flex flex-col z-10 shrink-0">
-        <div className="p-6 border-b border-outline-variant/10">
-          <h2 className="text-lg font-bold text-on-surface">Timeline Observer</h2>
-          <p className="text-xs text-on-surface-variant mt-1">{new Date().toLocaleDateString('default', { weekday: 'long', month: 'short', day: '2-digit' })}</p>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-          {/* Deadlines Section */}
-          <div className="space-y-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Upcoming Deadlines</h3>
-            {upcomingDeadlines.length > 0 ? (
-               upcomingDeadlines.map((job: any) => (
-                 <AgendaItem
-                   key={job.id}
-                   job={job}
-                   onClick={() => handleOpenDetail(job.id)}
-                 />
-               ))
-            ) : (
-               <p className="text-[10px] text-on-surface-variant font-bold opacity-30 italic">No pressing deadlines detected.</p>
-            )}
+      {/* Today's Agenda Sidebar - Desktop: always shown, Mobile: overlay */}
+      <>
+        {/* Mobile overlay backdrop */}
+        {showAgenda && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+            onClick={() => setShowAgenda(false)}
+          />
+        )}
+        <aside className={`
+          w-full sm:w-96 border-l border-outline-variant/10 bg-surface-container flex flex-col z-40 shrink-0
+          
+          /* Desktop: always visible inline */
+          lg:relative lg:translate-x-0
+          
+          /* Mobile: slide in from right as overlay */
+          fixed top-16 right-0 h-[calc(100vh-64px)]
+          transition-transform duration-300 ease-in-out
+          ${showAgenda ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+        `}>
+          <div className="p-4 md:p-6 border-b border-outline-variant/10 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-on-surface">Timeline Observer</h2>
+              <p className="text-xs text-on-surface-variant mt-1">{new Date().toLocaleDateString('default', { weekday: 'long', month: 'short', day: '2-digit' })}</p>
+            </div>
+            <button 
+              onClick={() => setShowAgenda(false)}
+              className="lg:hidden p-2 rounded-lg hover:bg-surface-container-high text-on-surface-variant"
+            >
+              <span className="material-symbols-outlined text-xl">close</span>
+            </button>
           </div>
-        </div>
-      </aside>
+          
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 space-y-8">
+            {/* Deadlines Section */}
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Upcoming Deadlines</h3>
+              {upcomingDeadlines.length > 0 ? (
+                 upcomingDeadlines.map((job: any) => (
+                   <AgendaItem
+                     key={job.id}
+                     job={job}
+                     onClick={() => handleOpenDetail(job.id)}
+                   />
+                 ))
+              ) : (
+                 <p className="text-[10px] text-on-surface-variant font-bold opacity-30 italic">No pressing deadlines detected.</p>
+              )}
+            </div>
+          </div>
+        </aside>
+      </>
     </div>
     
     <JobDetailDrawer
@@ -257,10 +300,10 @@ function CalendarEvent({ job, onClick }: any) {
   return (
     <div 
       onClick={onClick}
-      className={`px-2 py-1.5 rounded border-l-2 ${bgMap[color] || bgMap.primary} transition-all hover:opacity-80 active:scale-95 cursor-pointer`}
+      className={`px-1.5 md:px-2 py-1 md:py-1.5 rounded border-l-2 ${bgMap[color] || bgMap.primary} transition-all hover:opacity-80 active:scale-95 cursor-pointer`}
     >
-      <p className="text-[10px] font-bold truncate leading-tight">{job.company}</p>
-      {logisticalDetail}
+      <p className="text-[9px] md:text-[10px] font-bold truncate leading-tight">{job.company}</p>
+      <div className="hidden md:block">{logisticalDetail}</div>
     </div>
   )
 }
@@ -272,11 +315,11 @@ function StatMini({ label, value, sub, color }: any) {
     primary: 'text-primary'
   }
   return (
-    <div className="p-6 rounded-xl bg-surface-container-high inner-glow relative overflow-hidden group">
+    <div className="p-4 md:p-6 rounded-xl bg-surface-container-high inner-glow relative overflow-hidden group">
       <div className={`absolute -bottom-4 -right-4 w-24 h-24 bg-${color}/5 rounded-full blur-2xl group-hover:bg-${color}/10 transition-all`}></div>
       <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">{label}</p>
       <div className="flex items-baseline gap-2">
-        <span className="text-4xl font-bold tracking-tighter text-on-surface">{value.toString().padStart(2, '0')}</span>
+        <span className="text-2xl md:text-4xl font-bold tracking-tighter text-on-surface">{value.toString().padStart(2, '0')}</span>
         <span className={`${colorMap[color]} text-xs font-semibold`}>{sub}</span>
       </div>
     </div>

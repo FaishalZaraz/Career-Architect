@@ -102,7 +102,7 @@ const Dashboard = () => {
 
   const chartMonths = getChartMonths(chartRange)
   const chartData = chartMonths.map(m => {
-    const record = activity?.find((a: any) => a.month === m)
+    const record = Array.isArray(activity) ? activity.find((a: any) => a.month === m) : undefined
     return record ? Number(record.count) : 0
   })
 
@@ -119,21 +119,21 @@ const Dashboard = () => {
   return (
     <div className="space-y-10">
       {/* Section Header */}
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-4xl font-bold tracking-tighter text-on-surface mb-1">Executive Dashboard</h2>
-          <p className="text-on-surface-variant font-medium">Monitoring your career trajectory for <span className="text-primary">Live Optimization</span>.</p>
+          <h2 className="text-2xl md:text-4xl font-bold tracking-tighter text-on-surface mb-1">Executive Dashboard</h2>
+          <p className="text-on-surface-variant font-medium text-sm md:text-base">Monitoring your career trajectory for <span className="text-primary">Live Optimization</span>.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <button 
             onClick={handleDownloadReport}
-            className="bg-surface-container-high px-4 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-all border border-transparent hover:border-outline-variant/20"
+            className="bg-surface-container-high px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-all border border-transparent hover:border-outline-variant/20"
           >
             Download Report
           </button>
           <button 
             onClick={handleLiveInsights}
-            className="bg-primary/10 px-4 py-2 rounded-lg text-sm font-semibold text-primary hover:bg-primary/20 transition-all"
+            className="bg-primary/10 px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-primary hover:bg-primary/20 transition-all"
           >
             Live Insights
           </button>
@@ -141,7 +141,7 @@ const Dashboard = () => {
       </div>
 
       {/* Top Row: Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
         <SummaryCard 
           title="Total Applications" 
           value={isSummaryLoading ? '...' : stats.totalApplications} 
@@ -173,7 +173,7 @@ const Dashboard = () => {
       </div>
 
       {/* Middle Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
         {/* Upcoming Interviews */}
         <div className="lg:col-span-2 glass-panel inner-glow rounded-xl p-8">
           <div className="flex items-center justify-between mb-8">
@@ -191,7 +191,7 @@ const Dashboard = () => {
           <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
             {isInterviewsLoading ? (
               <p className="text-sm text-on-surface-variant italic">Loading schedules...</p>
-            ) : upcomingInterviews?.length > 0 ? (
+            ) : Array.isArray(upcomingInterviews) && upcomingInterviews.length > 0 ? (
               upcomingInterviews.map((interview: any) => {
                 const date = new Date(interview.time)
                 
@@ -248,7 +248,7 @@ const Dashboard = () => {
           <div className="space-y-6 flex-1">
             {isRecentLoading ? (
               <p className="text-sm text-on-surface-variant">Loading records...</p>
-            ) : recentJobs?.length > 0 ? (
+            ) : Array.isArray(recentJobs) && recentJobs.length > 0 ? (
               recentJobs.map((job: any) => (
                 <SubmissionItem 
                   key={job.id}
@@ -272,17 +272,17 @@ const Dashboard = () => {
       </div>
 
       {/* Bottom Row: Bar Chart */}
-      <div className="glass-panel inner-glow rounded-xl p-8">
-        <div className="flex items-center justify-between mb-10">
+      <div className="glass-panel inner-glow rounded-xl p-4 md:p-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-10 gap-4">
           <div>
-            <h4 className="text-xl font-bold tracking-tight text-on-surface">Jobs Applied per Month</h4>
-            <p className="text-sm text-on-surface-variant">{chartRange === 6 ? 'Last 6 months activity metrics' : 'Full year activity metrics'}</p>
+            <h4 className="text-lg md:text-xl font-bold tracking-tight text-on-surface">Jobs Applied per Month</h4>
+            <p className="text-xs md:text-sm text-on-surface-variant">{chartRange === 6 ? 'Last 6 months activity metrics' : 'Full year activity metrics'}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 self-start md:self-auto">
             <select 
               value={chartRange}
               onChange={(e) => setChartRange(Number(e.target.value))}
-              className="bg-surface-container-lowest border-none text-xs rounded-lg py-1 px-3 text-on-surface-variant focus:ring-0 outline-none cursor-pointer"
+              className="bg-surface-container-lowest border border-outline-variant/10 text-xs rounded-lg py-1.5 px-3 text-on-surface-variant focus:ring-0 outline-none cursor-pointer"
             >
               <option value={3}>Last 3 Months</option>
               <option value={6}>Last 6 Months</option>
@@ -290,34 +290,39 @@ const Dashboard = () => {
             </select>
           </div>
         </div>
-        <div className="h-64 w-full flex items-end justify-around px-4 pb-8 relative">
-          <div className="absolute inset-0 flex flex-col justify-between py-8 px-4 pointer-events-none">
-            <div className="w-full border-t border-outline-variant/5"></div>
-            <div className="w-full border-t border-outline-variant/5"></div>
-            <div className="w-full border-t border-outline-variant/5"></div>
-          </div>
-          {chartMonths.map((month, idx) => {
-            const count = chartData[idx]
-            const heightPercent = (count / maxCount) * 100
-            const isCurrentMonth = month === chartMonths[chartMonths.length - 1]
-            
-            return (
-              <div key={idx} className={`flex flex-col items-center justify-end gap-3 group cursor-pointer relative z-10 h-full ${chartRange === 12 ? 'w-10' : chartRange === 6 ? 'w-12' : 'w-20'}`}>
-                <div 
-                  className={`w-8 rounded-t-md transition-all duration-1000 ease-out ${isCurrentMonth ? 'bg-primary shadow-[0_0_20px_rgba(133,173,255,0.3)]' : 'bg-primary-container/20 group-hover:bg-primary-container'}`}
-                  style={{ 
-                    height: `${Math.max(heightPercent, 2)}%`,
-                    transitionDelay: `${idx * 0.1}s`
-                  }} // Minimum height for visibility
-                ></div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${isCurrentMonth ? 'text-primary' : 'text-on-surface-variant'}`}>{month}</span>
-                {/* Tooltip on hover */}
-                <div className="absolute -top-8 bg-surface-container-highest px-2 py-1 rounded text-[10px] font-bold text-on-surface opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  {count} Jobs
+        
+        <div className="w-full overflow-x-auto no-scrollbar relative">
+          <div className="h-48 md:h-64 flex items-end justify-around px-2 md:px-4 pt-10 md:pt-12 pb-8 relative min-w-[400px]">
+            <div className="absolute inset-0 flex flex-col justify-between pt-10 md:pt-12 pb-8 px-4 pointer-events-none">
+              <div className="w-full border-t border-outline-variant/5"></div>
+              <div className="w-full border-t border-outline-variant/5"></div>
+              <div className="w-full border-t border-outline-variant/5"></div>
+            </div>
+            {chartMonths.map((month, idx) => {
+              const count = chartData[idx]
+              const heightPercent = (count / maxCount) * 100
+              const isCurrentMonth = month === chartMonths[chartMonths.length - 1]
+              
+              return (
+                <div key={idx} className={`flex flex-col items-center justify-end gap-2 md:gap-3 group cursor-pointer relative z-10 h-full ${chartRange === 12 ? 'w-6 md:w-10' : chartRange === 6 ? 'w-8 md:w-12' : 'w-12 md:w-20'}`}>
+                  <div 
+                    className={`w-6 md:w-8 rounded-b-sm rounded-t-md transition-all duration-1000 ease-out relative flex justify-center ${isCurrentMonth ? 'bg-primary shadow-[0_0_20px_rgba(133,173,255,0.3)]' : 'bg-primary-container/20 group-hover:bg-primary-container'}`}
+                    style={{ 
+                      height: `${Math.max(heightPercent, 2)}%`,
+                      transitionDelay: `${idx * 0.1}s`
+                    }} // Minimum height for visibility
+                  >
+                    {/* Tooltip badge stacked directly on top */}
+                    <div className="absolute top-0 -translate-y-full bg-surface-container-highest px-1.5 py-1 md:py-1.5 rounded-md flex flex-col items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none min-w-[32px] md:min-w-[40px] shadow-lg border border-outline-variant/10">
+                      <span className="text-[10px] md:text-sm font-bold text-on-surface leading-none mb-0.5 md:mb-1">{count}</span>
+                      <span className="text-[8px] md:text-[9px] font-bold text-on-surface-variant leading-none capitalize">Jobs</span>
+                    </div>
+                  </div>
+                  <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest ${isCurrentMonth ? 'text-primary' : 'text-on-surface-variant'}`}>{month}</span>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>
@@ -347,7 +352,7 @@ function SummaryCard({ title, value, subtitle, icon, color }: any) {
         <span className={`text-[10px] font-bold tracking-widest uppercase ${color === 'primary' || color === 'tertiary' ? 'text-tertiary-dim' : 'text-on-surface-variant'}`}>{subtitle}</span>
       </div>
       <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">{title}</p>
-      <h3 className="text-4xl font-bold tracking-tighter text-on-surface">{value}</h3>
+      <h3 className="text-2xl md:text-4xl font-bold tracking-tighter text-on-surface">{value}</h3>
       <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${accentMap[color]} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
     </div>
   )

@@ -116,9 +116,9 @@ const JobDetailDrawer: React.FC<JobDetailDrawerProps> = ({ isOpen, jobId, onClos
       />
       
       {/* Job Detail Slide-over */}
-      <div className={`fixed top-0 right-0 h-full w-full max-w-2xl bg-slate-950/70 backdrop-blur-3xl shadow-2xl z-[70] flex flex-col border-l border-white/5 transition-transform duration-300 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full w-full sm:max-w-2xl bg-slate-950/70 backdrop-blur-3xl shadow-2xl z-[70] flex flex-col border-l border-white/5 transition-transform duration-300 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         {/* Top Action Bar */}
-        <div className="flex items-center justify-between px-8 h-16 bg-slate-950/40 backdrop-blur-xl border-b border-white/5">
+        <div className="flex items-center justify-between px-4 md:px-8 h-16 bg-slate-950/40 backdrop-blur-xl border-b border-white/5">
           <button 
             onClick={onClose}
             className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors active:scale-95"
@@ -153,7 +153,7 @@ const JobDetailDrawer: React.FC<JobDetailDrawerProps> = ({ isOpen, jobId, onClos
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-10 py-12 custom-scrollbar text-on-surface">
+        <div className="flex-1 overflow-y-auto px-4 md:px-10 py-8 md:py-12 custom-scrollbar text-on-surface">
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-on-surface-variant animate-pulse font-bold tracking-widest uppercase text-xs">Architecting Data...</p>
@@ -161,9 +161,9 @@ const JobDetailDrawer: React.FC<JobDetailDrawerProps> = ({ isOpen, jobId, onClos
           ) : job ? (
             <>
               {/* Header Section */}
-              <section className="mb-12 flex flex-col sm:flex-row items-start justify-between gap-6">
+              <section className="mb-8 md:mb-12 flex flex-col sm:flex-row items-start justify-between gap-4 md:gap-6">
                 <div className="flex gap-6 items-center">
-                  <div className="w-20 h-20 bg-surface-container flex items-center justify-center p-4 shadow-xl shadow-black/40 overflow-hidden shrink-0 rounded-2xl">
+                  <div className="w-14 h-14 md:w-20 md:h-20 bg-surface-container flex items-center justify-center p-3 md:p-4 shadow-xl shadow-black/40 overflow-hidden shrink-0 rounded-xl md:rounded-2xl">
                     <span className="material-symbols-outlined text-4xl text-on-surface-variant">corporate_fare</span>
                   </div>
                   <div>
@@ -176,7 +176,7 @@ const JobDetailDrawer: React.FC<JobDetailDrawerProps> = ({ isOpen, jobId, onClos
                       }`}>{job.status}</span>
                       <span className="text-on-surface-variant text-[10px] uppercase font-bold tracking-tighter opacity-70">• {new Date(job.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <h3 className="text-3xl font-extrabold tracking-tight leading-tight">{job.role}</h3>
+                    <h3 className="text-xl md:text-3xl font-extrabold tracking-tight leading-tight">{job.role}</h3>
                     <p className="text-lg text-primary font-medium">{job.company}</p>
                   </div>
                 </div>
